@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: peyk-configmap
+data:
+  app.ip: "0.0.0.0"
+  app.port: "8001"
