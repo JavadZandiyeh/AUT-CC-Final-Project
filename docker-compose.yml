@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  mysql_db:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    env_file:
+      - './env/shared.env'
+    ports:
+      - 3306:3306
+    volumes:
+      - ./service_mysql_db/data:/var/lib/mysql
+      - ./service_mysql_db/script:/docker-entrypoint-initdb.d
+  
+  coin_news:
+    image: amirhossein21/coinnews.macos:v0.2
+    container_name: coin_news
+    restart: always
+    ports:
+      - 8000:8000
+    volumes:
+      - type: bind
+        source: ./service_coin_news/config.yml
+        target: /go/src/app/config.yml
+
+  peyk:
+    image: peyk:v1
+    build:
+      context: ./service_peyk
+      dockerfile: Dockerfile
+    container_name: peyk
+    restart: always
+    ports:
+      - 8001:8001
+    volumes:
+      - ./service_peyk/project_peyk:/app/project_peyk
+    working_dir: /app/project_peyk
+    environment:
+      - APP_IP=0.0.0.0
+      - APP_PORT=8001
+    env_file:
+      - './env/shared.env'
+    depends_on:
+      - mysql_db
+      - coin_news
