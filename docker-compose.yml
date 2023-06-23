@@ -24,6 +24,21 @@ services:
         source: ./service_coin_news/config.yml
         target: /go/src/app/config.yml
 
+  bepa:
+    image: bepa:v1
+    build:
+      context: ./service_bepa
+      dockerfile: Dockerfile
+    container_name: bepa
+    restart: always
+    ports:
+      - 8002:8002
+    volumes:
+      - ./service_bepa:/app
+    depends_on:
+      - mysql_db
+      - coin_news
+
   peyk:
     image: peyk:v1
     build:
