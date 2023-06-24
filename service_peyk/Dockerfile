@@ -14,4 +14,4 @@ EXPOSE ${APP_PORT}
 
 WORKDIR /app/project_peyk
 
-ENTRYPOINT [ "/bin/bash", "entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "entrypoint.sh"]

@@ -59,3 +59,15 @@ services:
     depends_on:
       - mysql_db
       - coin_news
+
+  react:
+    image: react:v1
+    build:
+      context: ./service_react
+      dockerfile: Dockerfile
+    container_name: react
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - ./service_react/app_react:/app/app_react
