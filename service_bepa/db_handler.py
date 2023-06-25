@@ -15,7 +15,7 @@ class MySqlHandler:
         ## MySQL credentials
         self.host           = os.getenv('MYSQL_HOST')
         self.port           = int(os.getenv('MYSQL_PORT'))
-        self.user           = os.getenv('MYSQL_USER')
+        self.user           = 'root'
         self.database       = os.getenv('MYSQL_DATABASE')
         self.password       = os.getenv('MYSQL_ROOT_PASSWORD')
         self.cursor_class   = pymysql.cursors.DictCursor
@@ -40,19 +40,19 @@ class MySqlHandler:
     
     def insert_coin_price(self, coin_name: str, price: float):
         sql = """
-            INSERT INTO Price (coin_name, price) values ({coin_name}, {price})
+            INSERT INTO Prices (coin_name, price) values ("{coin_name}", {price})
         """
         with self.conn.cursor() as cursor:
-            cursor.execute(sql.format(coin_name, price))
+            cursor.execute(sql.format(coin_name=coin_name, price=price))
 
         self.conn.commit()
 
     def fetch_last_coin_price(self, coin_name: str):
         sql = """
-            SELECT * FROM Price WHERE coin_name={coin_name} ORDER BY time_stamp DESC
+            SELECT * FROM Prices WHERE coin_name="{coin_name}" ORDER BY time_stamp DESC
         """
         with self.conn.cursor() as cursor:
-            cursor.execute(sql.format(coin_name))
+            cursor.execute(sql.format(coin_name=coin_name))
 
         self.conn.commit()
 

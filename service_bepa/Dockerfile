@@ -4,7 +4,8 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
-RUN pip install requests
-RUN pip install pymysql
+RUN apk --update add build-base mysql-dev bash
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
 CMD ["python", "bepa.py"]
