@@ -3,11 +3,11 @@ import logging
 import requests
 from datetime import datetime
 from time import sleep
-from .db_handler import MySqlHandler
+from db_handler import MySqlHandler
 
 # Environmental Variables
 ## bepa config
-INTERVAL_SECONDS    = os.getenv('INTERVAL_SECONDS')
+INTERVAL_SECONDS    = int(os.getenv('INTERVAL_SECONDS'))
 COINNEWS_ENDPOINT   = os.getenv('COINNEWS_ENDPOINT')
 
 # instantiate logger
@@ -28,8 +28,12 @@ def fetch_coin_data():
             current_price = coin_price_dict['value']
             last_price = coin_last_price_dict['price']
 
+            logger.info(f'{coin_name}')
+            logger.info(f'{current_price=}, {last_price=}')
+
             # TODO: recheck the formula
             change = abs(current_price - last_price) / last_price
+            logger.info(f'{change=}')
 
             # write new value of `coin_name` to database
             db_handler.insert_coin_price(coin_name, current_price)
@@ -42,5 +46,6 @@ def fetch_coin_data():
 # loop
 while True:
     logger.info(f"Starting at {datetime.now()}")
+    fetch_coin_data()
     sleep(INTERVAL_SECONDS)
     logger.info(f"Ending {INTERVAL_SECONDS} seconds later at {datetime.now()}")

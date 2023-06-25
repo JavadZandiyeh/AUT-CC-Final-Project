@@ -4,6 +4,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip install requests
+RUN pip install pymysql
 
-CMD ["python3", "bepa.py"]
+CMD ["python", "bepa.py"]

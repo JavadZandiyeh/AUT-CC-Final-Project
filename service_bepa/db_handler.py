@@ -14,7 +14,7 @@ class MySqlHandler:
         self.logger = logger
         ## MySQL credentials
         self.host           = os.getenv('MYSQL_HOST')
-        self.port           = os.getenv('MYSQL_PORT')
+        self.port           = int(os.getenv('MYSQL_PORT'))
         self.user           = os.getenv('MYSQL_USER')
         self.database       = os.getenv('MYSQL_DATABASE')
         self.password       = os.getenv('MYSQL_ROOT_PASSWORD')
