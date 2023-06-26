@@ -1,18 +1,32 @@
-# from django.db import models
+from django.db import models
 
-# # Create your models here.
-# class Coin(models.Model):
-#    coin_name = models.CharField(max_length=30)
-#    timestamp = models.DateTimeField(auto_now_add=True)
-#    price = models.FloatField()
+class Coin(models.Model):
+    coin_name = models.CharField(max_length=100, primary_key=True)
 
-#    def __str__(self):
-#       return f"{self.coin_name}, {self.timestamp}, {self.price}"
+    class Meta:
+        db_table = "Coin"
 
-# class CoinAlertSubscription(models.Model):
-#    email = models.EmailField(max_length=200)
-#    coin = models.ForeignKey(Coin, on_delete=models.CASCADE)
-#    difference_percentage = models.IntegerField()
+class Prices(models.Model):
+    coin_name = models.CharField(max_length=100)
+    time_stamp = models.DateTimeField(auto_now_add=True)
+    price = models.FloatField(null=False)
+   
+    class Meta:
+        unique_together = (("coin_name", "time_stamp"),)
+        db_table = "Prices"
+    
+class AlertSubscriptions(models.Model):
+    email = models.CharField(max_length=100)
+    coin_name = models.CharField(max_length=100)
+    difference_percentage = models.IntegerField(null=False)
 
-#    def __str__(self):
-#       return f"{self.email}, {self.coin_name}, {self.difference_percentage}"
+    class Meta:
+        unique_together = (("email", "coin_name"),)
+        db_table = "AlertSubscriptions"
+    
+    def __str__(self) -> str:
+        return {
+            "email": self.email,
+            "coin_name": self.coin_name,
+            "percentage": self.difference_percentage
+        }
