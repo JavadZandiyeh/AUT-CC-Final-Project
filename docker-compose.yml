@@ -58,7 +58,6 @@ services:
       - './env/shared.env'
     depends_on:
       - mysql_db
-      - coin_news
 
   react:
     image: react:v1
