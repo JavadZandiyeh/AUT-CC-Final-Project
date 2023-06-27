@@ -63,13 +63,14 @@ def fetch_coin_data():
                     logger.info(f'{change=}')
                     change_percentage_dict[coin_name] = change
 
+                    triggered_records = db_handler.triggered_subscription(coin_name, change)
+                    for triggered_record in triggered_records:
+                        triggered_record['change_percentage'] = change
+                        send_email(triggered_record)
+
                 # write new value of `coin_name` to database
                 db_handler.insert_coin_price(coin_name, current_price)
 
-                triggered_records = db_handler.triggered_subscription(coin_name, change)
-                for triggered_record in triggered_records:
-                    triggered_record['change_percentage'] = change
-                    send_email(triggered_record)
 
             except Exception as e:
                 logger.error(f'fetch {coin_name} price failed: {e}', exc_info=True)
