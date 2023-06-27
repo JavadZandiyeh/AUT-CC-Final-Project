@@ -14,7 +14,7 @@ services:
       - ./service_mysql_db/script:/docker-entrypoint-initdb.d
   
   coin_news:
-    image: amirhossein21/coinnews.macos:v0.2
+    image: amirhossein21/coinnews.linux:v0.2
     container_name: coin_news
     restart: always
     ports:
@@ -35,6 +35,11 @@ services:
       - 8002:8002
     volumes:
       - ./service_bepa:/app
+    environment:
+      - INTERVAL_SECONDS=10
+      - COINNEWS_ENDPOINT=http://coin_news:8000
+    env_file:
+      - './env/shared.env'
     depends_on:
       - mysql_db
       - coin_news
