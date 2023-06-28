@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "service_bepa.fullname" . }}-configs
+  namespace: {{ .Release.Namespace }}
+data:
+  INTERVAL_SECONDS: {{ quote .Values.configs.INTERVAL_SECONDS | indent 2 }}
+  COINNEWS_ENDPOINT: {{ quote .Values.configs.COINNEWS_ENDPOINT | indent 2}}
+  MYSQL_DATABASE: {{ quote .Values.configs.MYSQL_DATABASE | indent 2}}
+  MYSQL_HOST: {{ quote .Values.configs.MYSQL_HOST | indent 2}}
+  MYSQL_PORT: {{ quote .Values.configs.MYSQL_PORT | indent 2}}
+  MYSQL_USER: {{ quote .Values.configs.MYSQL_USER | indent 2}}
