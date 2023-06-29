@@ -10,3 +10,4 @@ data:
   MYSQL_HOST: {{ quote .Values.configs.MYSQL_HOST | indent 2}}
   MYSQL_PORT: {{ quote .Values.configs.MYSQL_PORT | indent 2}}
   MYSQL_USER: {{ quote .Values.configs.MYSQL_USER | indent 2}}
+  MYSQL_ROOT_PASSWORD: {{ quote .Values.secrets.MYSQL_ROOT_PASSWORD | indent 2}}

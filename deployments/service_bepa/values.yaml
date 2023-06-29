@@ -84,14 +84,14 @@ affinity: {}
 
 configs:
   INTERVAL_SECONDS: 3
-  COINNEWS_ENDPOINT: http://service-coin-news:8000
+  COINNEWS_ENDPOINT: http://coin-news-service-coin-news:8000
   MYSQL_DATABASE: coin_db
   MYSQL_HOST: mysql-db
   MYSQL_PORT: 3306
   MYSQL_USER: admin
 
 secrets:
-  MYSQL_ROOT_PASSWORD: cGFzcw==
+  MYSQL_ROOT_PASSWORD: pass
 
 volumes:
   name: bepa-volume

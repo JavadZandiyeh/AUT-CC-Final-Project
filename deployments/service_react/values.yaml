@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: react
-  pullPolicy: Never
+  pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "v1"
 
@@ -37,7 +37,7 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port: 3000
   targetPort: 3000
 
@@ -81,3 +81,8 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+volumes:
+  name: react-volume
+  hostPath: /app/app_react
+  mountPath: /app/app_react
