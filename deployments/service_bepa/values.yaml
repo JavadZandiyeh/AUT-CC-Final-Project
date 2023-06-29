@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: bepa
-  pullPolicy: Never
+  pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "v1"
 
@@ -91,4 +91,9 @@ configs:
   MYSQL_USER: admin
 
 secrets:
-  MYSQL_ROOT_PASSWORD: pass
+  MYSQL_ROOT_PASSWORD: cGFzcw==
+
+volumes:
+  name: bepa-volume
+  hostPath: /app
+  mountPath: /app

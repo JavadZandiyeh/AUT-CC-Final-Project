@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: peyk
-  pullPolicy: Never
+  pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "v1"
 
@@ -93,3 +93,7 @@ configs:
 secrets:
   MYSQL_ROOT_PASSWORD: pass
 
+volumes:
+  name: peyk-volume
+  hostPath: /app/project_peyk
+  mountPath: /app/project_peyk

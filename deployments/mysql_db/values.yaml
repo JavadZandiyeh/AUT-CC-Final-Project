@@ -111,8 +111,8 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   # storageClass: "-"
-  accessMode: ReadWriteOnce
-  size: 8Gi
+  accessMode: ReadWriteMany
+  size: 512Mi
   annotations: {}
 
 ## Use an alternate scheduler, e.g. "stork".
@@ -218,7 +218,7 @@ serviceAccount:
   create: true
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the mariadb.fullname template
-  name: mysql-db
+  name: service-mysql-db
 
 ssl:
   enabled: false

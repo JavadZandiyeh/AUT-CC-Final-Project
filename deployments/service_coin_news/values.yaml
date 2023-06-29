@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: amirhossein21/coinnews.linux
-  pullPolicy: Never
+  repository: amirhossein21/coinnews.macos
+  pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "v0.2"
 
@@ -21,7 +21,7 @@ serviceAccount:
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name: "coin-news"
+  name: "service-coin-news"
 
 podAnnotations: {}
 
