@@ -41,7 +41,7 @@ mysqlDatabase: coin_db
 ## It's recommended to change this to 'Always' if the image tag is 'latest'
 ## ref: http://kubernetes.io/docs/user-guide/images/#updating-images
 ##
-imagePullPolicy: Never
+imagePullPolicy: Always
 
 ## Additionnal arguments that are passed to the MySQL container.
 ## For example use --default-authentication-plugin=mysql_native_password if older clients need to
@@ -111,8 +111,8 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   # storageClass: "-"
-  accessMode: ReadWriteOnce
-  size: 8Gi
+  accessMode: ReadWriteMany
+  size: 512Mi
   annotations: {}
 
 ## Use an alternate scheduler, e.g. "stork".
@@ -150,8 +150,26 @@ configurationFiles: {}
 initializationFiles: 
   create_tables.sql: |-
     CREATE DATABASE IF NOT EXISTS coin_db DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-#  second-db.sql: |-
-#    CREATE DATABASE IF NOT EXISTS second DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+    CREATE TABLE IF NOT EXISTS Coin (
+      coin_name VARCHAR(100),
+      PRIMARY KEY (coin_name)
+    );
+
+    CREATE TABLE IF NOT EXISTS Prices (
+      coin_name VARCHAR(100),
+      time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      price FLOAT NOT NULL,
+      FOREIGN KEY (coin_name) REFERENCES Coin(coin_name),
+      PRIMARY KEY (coin_name, time_stamp)
+    );
+
+    CREATE TABLE IF NOT EXISTS AlertSubscriptions (
+      email VARCHAR(100),
+      coin_name VARCHAR(100),
+      difference_percentage INT NOT NULL,
+      FOREIGN KEY (coin_name) REFERENCES Coin(coin_name),
+      PRIMARY KEY (email, coin_name)
+    );
 
 # To enaable the mysql X Protocol's port
 # .. will expose the port 33060
@@ -200,7 +218,7 @@ serviceAccount:
   create: true
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the mariadb.fullname template
-  name: mysql-db
+  name: service-mysql-db
 
 ssl:
   enabled: false

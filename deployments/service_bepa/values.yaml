@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: nginx
+  repository: bepa
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "v1"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -21,7 +21,7 @@ serviceAccount:
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name: ""
+  name: "service-bepa"
 
 podAnnotations: {}
 
@@ -38,7 +38,8 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8002
+  targetPort: 8002
 
 ingress:
   enabled: false
@@ -80,3 +81,19 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+configs:
+  INTERVAL_SECONDS: 3
+  COINNEWS_ENDPOINT: http://service-coin-news:8000
+  MYSQL_DATABASE: coin_db
+  MYSQL_HOST: mysql-db
+  MYSQL_PORT: 3306
+  MYSQL_USER: admin
+
+secrets:
+  MYSQL_ROOT_PASSWORD: cGFzcw==
+
+volumes:
+  name: bepa-volume
+  hostPath: /app
+  mountPath: /app

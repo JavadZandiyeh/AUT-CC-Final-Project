@@ -24,6 +24,10 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+        - name: {{ .Values.volumes.name }}
+          hostPath:
+            path: {{ .Values.volumes.hostPath }}
       serviceAccountName: {{ include "service_peyk.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
@@ -37,6 +41,9 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+          volumeMounts:
+            - name: {{ .Values.volumes.name }}
+              mountPath: {{ .Values.volumes.mountPath }}
           livenessProbe:
             httpGet:
               path: /
@@ -47,6 +54,12 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          envFrom:
+          - secretRef:
+              name: {{ template "service_peyk.fullname" . }}-auth
+          envFrom:
+          - configMapRef:
+              name: {{ template "service_peyk.fullname" . }}-configs
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
