@@ -27,7 +27,7 @@ def subscribe_coin(request) -> Response:
 
     return Response({'message': alert_subscription.__str__()}, status.HTTP_200_OK)
 
-@api_view(['GET'])
+@api_view(['POST'])
 def get_price_history(request) -> Response:
     serializer = serializers.CoinSerializer(data=request.data)
     if not serializer.is_valid():

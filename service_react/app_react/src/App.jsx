@@ -20,10 +20,10 @@ function App() {
   function handleSubscribe(e) {
     e.preventDefault();
     axios
-      .post(apiUrl, {
+      .post(apiUrl + "subscribe/", {
         email: email,
-        coin: coin,
-        percent: percent,
+        coin_name: coin,
+        difference_percentage: percent,
       })
       .then((res) => {
         if (res.status) {
@@ -31,17 +31,19 @@ function App() {
         }
       })
       .catch((err) => {
-        alert(err);
+        alert(err.response.data.message);
       });
   }
 
   function handleGetCoin(e) {
     e.preventDefault();
     axios
-      .get(apiUrl + coinToGetData)
+      .post(apiUrl + "price/", {
+        coin_name: coinToGetData
+      })
       .then((res) => {
         if (res.status) {
-          setCoinData(res.data);
+          setCoinData(res.data.message);
         }
       })
       .catch((err) => {
@@ -147,7 +149,11 @@ function App() {
               value="Submit"
             />
           </form>
-          {coinData}
+          {coinData?.map((item, index) => (
+            <div key={index}>
+              <span>time_stamp: {item.time_stamp}</span>&nbsp;<span>| price: {item.price} | coin_name: {item.coin_name}</span>
+            </div>
+          ))}
         </div>
       </div>
     </div>
