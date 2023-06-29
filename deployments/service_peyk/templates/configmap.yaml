@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   APP_IP: {{ quote .Values.configs.APP_IP | indent 2 }}
-  APP_PORT: {{ quote .Values.configs.COINNEWS_ENDPOINT | indent 2}}
+  APP_PORT: {{ quote .Values.configs.APP_PORT | indent 2}}
   MYSQL_DATABASE: {{ quote .Values.configs.MYSQL_DATABASE | indent 2}}
   MYSQL_HOST: {{ quote .Values.configs.MYSQL_HOST | indent 2}}
   MYSQL_PORT: {{ quote .Values.configs.MYSQL_PORT | indent 2}}
