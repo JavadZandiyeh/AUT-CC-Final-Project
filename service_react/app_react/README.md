@@ -1,70 +1,65 @@
-# Getting Started with Create React App
+# React UI — price history and subscriptions
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Create React App frontend for the [AUT Cloud Computing Final Project](../../README.md). It provides two forms that call the Peyk API: coin price history and alert subscription.
 
-## Available Scripts
+## Features (implemented)
 
-In the project directory, you can run:
+- **Price History Form** — `POST` `{apiUrl}price/` with `coin_name`; renders returned rows as `coin_name / price / time_stamp`
+- **Subscription Form** — `POST` `{apiUrl}subscribe/` with `email`, `coin_name`, and `difference_percentage` (0–100)
 
-### `npm start`
+API base URL is defined in `src/config.js`:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```js
+export const apiUrl = "http://localhost:8001/"
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Change this value if Peyk is not reachable at that address (for example under Kubernetes LoadBalancer or a different host port).
 
-### `npm test`
+## Layout
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```text
+service_react/
+├── Dockerfile                 # node:lts-alpine3.18, npm install, entrypoint
+└── app_react/
+    ├── package.json
+    ├── entrypoint.sh          # npm start
+    ├── public/
+    └── src/
+        ├── App.jsx            # UI and Axios calls
+        ├── config.js          # apiUrl
+        ├── index.js
+        └── App.test.js        # Default CRA test (outdated vs current UI)
+```
 
-### `npm run build`
+## Dependencies
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Main runtime packages from `package.json`: React 18.2, `react-dom`, `react-scripts` 5, Axios 1.4. Testing libraries from CRA are present; `react-cool-form` is listed but not used by `App.jsx`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Scripts
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+From `app_react/`:
 
-### `npm run eject`
+```bash
+npm install
+npm start      # http://localhost:3000
+npm test       # CRA Jest runner (current App.test.js expects removed CRA boilerplate text)
+npm run build  # production build to build/
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Do not run `npm run eject` unless you intentionally want an irreversible CRA eject.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Docker
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Compose service `react` builds `react:v1` from `service_react/Dockerfile`, mounts `app_react`, exposes port `3000`, and starts via `entrypoint.sh` → `npm start`.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Limitations
 
-## Learn More
+- API host is hardcoded; no runtime env injection for `apiUrl`
+- No CORS setup is provided in Peyk; browser requests from another origin may fail until CORS is configured
+- `App.test.js` still asserts “learn react” and does not cover the forms
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Related docs
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [Project README](../../README.md)
+- [Peyk API](../../service_peyk/README.md)
+- [Deployments](../../deployments/README.md)
